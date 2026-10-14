@@ -1,0 +1,199 @@
+---
+import { foodOptions } from '../data/food-options'
+import { mealKinds } from '../data/daily-life'
+const calendars = [
+  {
+    id: 'bowel',
+    title: '💩 POOP DIARY',
+    label: '便便月历',
+    heading: '每次小轻松，都值得记下来。',
+  },
+  {
+    id: 'meals',
+    title: '🍚 MEAL MEMORIES',
+    label: '吃饭记录',
+    heading: '好好吃饭，也是一件幸福的事。',
+  },
+]
+---
+
+{
+  calendars.map((app) => (
+    <section
+      class="retro-window daily-window"
+      id={`window-${app.id}`}
+      role="dialog"
+      aria-labelledby={`title-${app.id}`}
+      tabindex="-1"
+      hidden
+    >
+      <header class="window-titlebar">
+        <h2 id={`title-${app.id}`}>{app.title}</h2>
+        <div>
+          <>
+            <button data-minimize aria-label={`最小化${app.label}`}>
+              −
+            </button>
+            <button data-close aria-label={`关闭${app.label}`}>
+              ×
+            </button>
+          </>
+        </div>
+      </header>
+      <div class="window-body daily-body">
+        <span class="micro-label">PIGGY BANK / LITTLE DAILY MOMENTS</span>
+        <h3>{app.heading}</h3>
+        {app.id === 'bowel' ? (
+          <div class="checkin-strip">
+            <button class="daily-primary" id="bowel-checkin">
+              💩 现在签到
+            </button>
+            <p>点一下就保存此刻时间，再在下方补选状态。一天可以签到多次。</p>
+          </div>
+        ) : (
+          <form id="meal-form" class="meal-form">
+            <label>
+              吃了什么
+              <input
+                id="meal-name"
+                name="dish"
+                required
+                maxlength="80"
+                placeholder="比如：番茄炒蛋盖饭"
+              />
+            </label>
+            <label>
+              哪一餐
+              <select id="meal-kind" name="kind">
+                {mealKinds.map((kind) => (
+                  <option selected={kind === '午餐'}>{kind}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              用餐时间
+              <input
+                id="meal-time"
+                name="time"
+                type="datetime-local"
+                required
+              />
+            </label>
+            <label>
+              小备注（可不填）
+              <input
+                id="meal-note"
+                name="note"
+                maxlength="200"
+                placeholder="这家很好吃，下次还来 ♡"
+              />
+            </label>
+            <button class="daily-primary" type="submit">
+              ♡ 存下这一餐
+            </button>
+          </form>
+        )}
+        <p class="daily-feedback" id={`${app.id}-feedback`} role="status" />
+        <div class="diary-layout">
+          <section class="calendar-panel" aria-label={`${app.label}日历`}>
+            <div class="calendar-nav">
+              <button
+                data-month={app.id}
+                data-step="-1"
+                aria-label={`${app.label}上个月`}
+              >
+                ‹
+              </button>
+              <h4 id={`${app.id}-month`} />
+              <button
+                data-month={app.id}
+                data-step="1"
+                aria-label={`${app.label}下个月`}
+              >
+                ›
+              </button>
+              <button data-today={app.id} class="calendar-today">
+                今天
+              </button>
+            </div>
+            <div class="calendar-week" aria-hidden="true">
+              {['一', '二', '三', '四', '五', '六', '日'].map((day) => (
+                <span>{day}</span>
+              ))}
+            </div>
+            <div class="calendar-grid" id={`${app.id}-calendar`} />
+            <p class="calendar-caption" id={`${app.id}-summary`} />
+          </section>
+          <section class="diary-detail" aria-labelledby={`${app.id}-day-title`}>
+            <h4 id={`${app.id}-day-title`} />
+            <div id={`${app.id}-entries`} class="diary-entries" />
+          </section>
+        </div>
+        <p class="daily-privacy">
+          🔒
+          仅保存在当前浏览器，不上传、不跨设备同步。清除浏览器数据会丢失记录，请定期备份。便便状态仅作生活记录，不提供医学判断。
+        </p>
+        <button class="daily-secondary" data-export-diary>
+          ↓ 导出生活记录备份
+        </button>
+      </div>
+    </section>
+  ))
+}
+
+<section
+  class="retro-window daily-window food-window"
+  id="window-food"
+  role="dialog"
+  aria-labelledby="title-food"
+  tabindex="-1"
+  hidden
+>
+  <header class="window-titlebar">
+    <h2 id="title-food">🎰 PIGGY'S FOOD MACHINE</h2>
+    <div>
+      <button data-minimize aria-label="最小化吃什么老虎机">−</button><button
+        data-close
+        aria-label="关闭吃什么老虎机">×</button
+      >
+    </div>
+  </header>
+  <div class="window-body daily-body">
+    <span class="micro-label">NO BETS / JUST GOOD FOOD</span>
+    <h3>今天吃什么？让小猪来决定。</h3>
+    <div class="food-modes" role="group" aria-label="抽饭模式">
+      <button data-food-mode="all" aria-pressed="true">🌏 所有种类</button>
+      <button data-food-mode="history" aria-pressed="false"
+        >🍚 从吃过的饭里抽</button
+      >
+    </div>
+    <p id="food-pool-note" class="food-pool-note"></p>
+    <div class="food-categories" id="food-categories" aria-label="内置菜品种类">
+      {foodOptions.map((group) => <span>{group.category}</span>)}
+    </div>
+    <div class="slot-machine" id="food-machine">
+      <div class="slot-top">♥ PIGGY'S LUCKY MENU ♥</div>
+      <div class="slot-reels" aria-hidden="true">
+        <span>🍚</span><span>🍜</span><span>🥟</span>
+      </div>
+      <div
+        class="slot-result"
+        id="food-result"
+        role="status"
+        aria-live="polite"
+      >
+        把选择困难交给小猪吧
+      </div>
+      <button class="slot-lever" id="food-spin">拉一下 · 抽吃什么 ↓</button>
+      <span class="slot-bottom">每一餐，都要开心吃 ♡</span>
+    </div>
+    <p class="daily-feedback" id="food-feedback" role="status"></p>
+    <button class="daily-primary" id="food-add-meal" disabled
+      >🍚 我吃这个 · 去记一餐</button
+    >
+    <p class="daily-privacy">
+      “所有种类”使用内置的 8 类 48
+      道候选，不代表世界上所有食物；历史模式按菜名去重后等概率抽取。无投注、无付费，仅帮你选一餐；忌口或过敏食物请自行排除。
+    </p>
+  </div>
+</section>

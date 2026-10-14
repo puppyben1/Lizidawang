@@ -18,7 +18,7 @@ function generateSitemap() {
     name: 'generate-sitemap',
     hooks: {
       'astro:build:done': ({ dir }) => {
-        const distDir = new URL(dir).pathname
+        const distDir = fileURLToPath(dir)
         const src = join(distDir, 'sitemap-0.xml')
         const dest = join(distDir, 'sitemap.xml')
         if (!existsSync(src)) {
@@ -51,7 +51,7 @@ function resolveViteEnv() {
 }
 
 export default defineConfig({
-  site: 'https://example.com/',
+  site: 'https://xiaozhubao.top/',
   compressHTML: true,
   devToolbar: {
     enabled: false,
@@ -100,7 +100,7 @@ export default defineConfig({
     remarkPlugins: [
       remarkGithubAlerts,
       remarkDemoteH1ToH2,
-      [remarkExternalLinks, { allowHostnames: ['example.com'] }],
+      [remarkExternalLinks, { allowHostnames: ['xiaozhubao.top'] }],
     ],
     rehypePlugins: [rehypeHeadingLinks, rehypeThoughtLineBreaks],
   },

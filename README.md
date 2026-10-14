@@ -1,4 +1,38 @@
-# Astro Doge
+# 小猪宝 · 把小日子存起来
+
+粉色小猪存钱罐风格的回忆桌面，含照片抽屉、信箱、便便签到月历、吃饭记录和吃什么老虎机。
+
+## 本项目运行与部署
+
+使用 Node.js 24 和 npm。仓库根目录就是网站根目录，不需要 REA。
+
+```sh
+npm ci
+npm run dev
+```
+
+生产构建：`npm run build`。生活记录自检：`node scripts/check-daily-life.ts`。
+
+在 Vercel 导入 `puppyben1/xiaozhubao`，Root Directory 保持仓库根目录（留空或 `./`），使用 Astro 框架。
+`vercel.json` 已指定 `npm ci` 和 `npm run build`，`package.json` 指定 Node.js 24。
+首次部署成功后，在项目 Settings → Domains 添加 `xiaozhubao.top`，并按 Vercel 提示配置 DNS。
+代码中的站点 URL 已设置为 `https://xiaozhubao.top/`，实际域名绑定仍需在平台完成。
+
+首页与生活记录不需要配置密钥。生活数据只保存在当前浏览器，不上传到 GitHub 或 Vercel，不跨设备同步。
+照片与信件目前为示例；真实素材放入仓库后会公开发布，请勿提交私密内容。
+上游评论、在线发布和上传接口保留但未配置，不代表这些服务已经可用。
+不要提交 `.env`、`.vercel`、`node_modules` 或构建产物。
+
+更多交互和素材说明见 [MEMORY-DESKTOP.md](./MEMORY-DESKTOP.md)。
+
+## 来源与许可
+
+基于 [dogxii/astro-doge](https://github.com/dogxii/astro-doge)，起始提交 `158aa6f31f789f354d066196e507a4135d64f136`，保留 MIT 许可与上游 Git 历史。
+下面为上游主题文档，涉及 Bun 的开发命令仅供参考；本项目部署以此处的 npm 配置为准。
+
+---
+
+# Astro Doge（上游主题文档）
 
 一个静态优先、但可按需打开动态能力的 Astro 6 博客模板。
 

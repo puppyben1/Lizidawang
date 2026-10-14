@@ -1,398 +1,486 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content'
-import Container from '@components/Container.astro'
-import Link from '@components/Link.astro'
-import TechBadge from '@components/TechBadge.astro'
-import { HOME, SITE } from '@consts'
-import PageLayout from '@layouts/PageLayout.astro'
-import { isVisiblePost, showDraftPosts } from '@lib/posts'
-import { formatDate, readingTime, timeAgo } from '@lib/utils'
-
-function extractPlainText(body: string): string {
-  return body
-    .replace(/^---[\s\S]*?---\n?/, '')
-    .replace(/```(\w+)?[\s\S]*?```/g, (_, lang) =>
-      lang ? `[代码: ${lang}]` : '[代码]',
-    )
-    .replace(/`[^`\n]+`/g, '[代码]')
-    .replace(/!\[.*?\]\(.*?\)/g, '')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/^#{1,6}\s+/gm, '')
-    .replace(/\*{1,3}([^*\n]+)\*{1,3}/g, '$1')
-    .replace(/_{1,3}([^_\n]+)_{1,3}/g, '$1')
-    .replace(/^>\s*/gm, '')
-    .replace(/<[^>]+>/g, '')
-    .replace(/\n+/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .trim()
-}
-
-const posts = (await getCollection('posts'))
-  .filter((post: CollectionEntry<'posts'>) => isVisiblePost(post))
-  .sort(
-    (a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) =>
-      b.data.date.valueOf() - a.data.date.valueOf(),
-  )
-
-const thoughts = (await getCollection('thoughts'))
-  .filter((thought: CollectionEntry<'thoughts'>) => !thought.data.draft)
-  .sort(
-    (a: CollectionEntry<'thoughts'>, b: CollectionEntry<'thoughts'>) =>
-      b.data.date.valueOf() - a.data.date.valueOf(),
-  )
-
-const accentClasses = [
-  'bg-amber-300',
-  'bg-rose-300',
-  'bg-sky-300',
-  'bg-emerald-300',
-  'bg-indigo-300',
-]
-
-const featureItems = ['文章归档', '碎碎念', '相册', '评论 / 留言板', 'PWA']
-const featureImagePost = posts.find((post) => post.data.cover)
+import { photos, letters } from '../data/memory'
+import '../styles/memory.css'
+import DailyWindows from '../components/DailyWindows.astro'
+import '../styles/daily-life.css'
 ---
 
-<PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
-  <Container class="!max-w-5xl">
-    <div class="space-y-6">
-      <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
-        <section
-          class="ink-shell ink-shell--flat relative overflow-hidden px-5 py-7 sm:px-8 sm:py-8"
-        >
-          <div
-            class="grid items-center gap-6 md:grid-cols-[minmax(0,1fr)_150px]"
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="一个收藏文字、照片和小小快乐的复古回忆桌面。"
+    />
+    <meta name="theme-color" content="#f5c9db" />
+    <title>小猪宝 · 把小日子存起来</title>
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <a class="skip-link" href="#desktop">跳到桌面内容</a>
+    <div class="memory-os" data-theme="pudding">
+      <header class="menu-bar">
+        <a href="/" class="os-brand"><span>♥</span> FOR YOU OS</a>
+        <nav aria-label="桌面菜单">
+          <button data-open="photos">FILE</button>
+          <button data-open="mail">MAIL</button>
+          <a href="/posts">BLOG ↗</a>
+        </nav>
+        <div class="menu-right">
+          <label for="theme-picker">STYLE</label>
+          <select id="theme-picker"
+            ><option value="bubble">B · BUBBLE AQUA</option><option
+              value="picnic">A · COOKIE PICNIC</option
+            ><option value="pudding" selected>C · PIGGY PINK</option></select
           >
-            <div class="text-center sm:text-left">
-              <div class="relative inline-block">
-                <h1
-                  class="text-4xl leading-none font-semibold tracking-normal text-stone-900 sm:text-5xl dark:text-stone-100"
-                >
-                  {SITE.NAME}
-                </h1>
-              </div>
-              <p class="mt-4 text-sm text-stone-500 dark:text-stone-500">
-                {SITE.DESCRIPTION}
-              </p>
-              <div
-                class="mt-6 flex flex-wrap justify-center gap-2 sm:justify-start"
-              >
-                <TechBadge icon="bun.svg" name="Bun">Bun</TechBadge>
-                <TechBadge icon="typescript.svg" name="TypeScript"
-                  >TypeScript</TechBadge
-                >
-                <TechBadge icon="godot.svg" name="Astro Doge"
-                  >Template</TechBadge
-                >
-              </div>
-            </div>
+          <span class="system-date">MEMORY EDITION</span>
+        </div>
+      </header>
 
-            <div class="mx-auto hidden w-36 md:block">
-              <picture>
-                <source srcset="/hero.webp" type="image/webp" />
-                <img
-                  src="/hero.png"
-                  alt="小狗插画"
-                  width="420"
-                  height="310"
-                  class="h-auto w-full border-0 object-contain shadow-none"
-                  loading="eager"
-                  decoding="async"
-                  fetchpriority="high"
-                />
-              </picture>
-            </div>
+      <main id="desktop" class="desktop">
+        <div class="sky-dots" aria-hidden="true"></div>
+        <svg
+          class="landscape"
+          viewBox="0 0 1440 380"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          ><path
+            d="M0 280 170 200 280 230 390 145 520 210 680 100 830 195 1000 125 1130 220 1290 150 1440 200V380H0Z"
+            fill="currentColor"></path><path
+            d="M0 288 170 211 280 241 390 155"
+            fill="none"
+            stroke="var(--lavender)"
+            stroke-width="9"
+            opacity=".48"></path></svg
+        >
+        <div class="sparkles" aria-hidden="true">
+          {
+            Array.from({ length: 11 }, (_, index) => (
+              <span style={`--index:${index}`}>✦</span>
+            ))
+          }
+        </div>
+        <section class="hero">
+          <div class="eyebrow">FOR YOU / LITTLE MEMORIES / FOREVER</div>
+          <h1>FOR YOU<span>.zip</span></h1>
+          <p class="hero-subtitle">A little memory archive</p>
+          <p class="hero-description">把与你有关的回忆，一件件收好。</p>
+          <p class="hero-copy">
+            有些日子值得按下保存键。<br
+            />照片、信件，还有那些不想忘记的小事。<br
+            />欢迎回来，这里一直有你的位置。
+          </p>
+          <button class="boot-button" data-open="photos"
+            ><span>OPEN A LITTLE MEMORY</span><span>↗</span></button
+          >
+          <div class="hero-meta">
+            <span class="status-dot"></span> LOCAL FIRST <span>·</span> MADE WITH
+            A LITTLE LOVE
           </div>
+          <nav class="daily-dock" aria-label="小猪生活应用">
+            <button data-open="bowel"
+              ><span>💩</span>便便签到<small>记录小轻松</small></button
+            >
+            <button data-open="meals"
+              ><span>🍚</span>吃饭记录<small>收藏每一餐</small></button
+            >
+            <button data-open="food"
+              ><span>🎰</span>今天吃什么<small>让小猪帮你选</small></button
+            >
+          </nav>
         </section>
 
-        {
-          featureImagePost?.data.cover && (
-            <a
-              href={`/${featureImagePost.data.slug || featureImagePost.id}`}
-              class="cover-link cover-frame group relative hidden p-0 lg:block lg:min-h-full"
-              aria-label={`阅读文章：${featureImagePost.data.title}`}
-            >
-              <img
-                src={featureImagePost.data.cover}
-                alt=""
-                class="cover-image absolute inset-0 h-full"
-                loading="lazy"
-                decoding="async"
-              />
-              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/25 to-transparent p-4 text-white">
-                <p class="text-xs opacity-80">最新文章</p>
-                <p class="mt-1 line-clamp-2 text-sm leading-snug font-medium">
-                  {featureImagePost.data.title}
-                </p>
-              </div>
-            </a>
-          )
-        }
-      </div>
+        <section class="buddy-scene" aria-label="桌面伙伴">
+          <div class="speech-bubble">
+            哼哼，把今天的开心存起来 <span>♡</span>
+          </div>
+          <svg
+            class="buddy"
+            viewBox="0 0 320 300"
+            role="img"
+            aria-label="粉色小猪存钱罐，头顶投币口和爱心金币"
+          >
+            <ellipse
+              cx="172"
+              cy="276"
+              rx="91"
+              ry="13"
+              fill="#554662"
+              opacity=".12"></ellipse>
+            <path
+              d="M73 207Q47 229 65 241Q86 252 101 223M228 207Q254 229 238 244Q218 252 204 225"
+              fill="#f5b5cd"
+              stroke="#57496a"
+              stroke-width="5"></path>
+            <path
+              d="M124 236Q106 272 126 274Q143 274 148 246M183 243Q188 273 208 272Q222 267 206 236"
+              fill="#e995b5"
+              stroke="#57496a"
+              stroke-width="5"></path>
+            <ellipse
+              cx="166"
+              cy="153"
+              rx="113"
+              ry="109"
+              fill="#57496a"
+              opacity=".75"></ellipse>
+            <path
+              d="M78 80Q51 13 99 29Q132 35 128 72M189 67Q190 14 225 28Q254 43 235 91"
+              fill="#f5b5cd"
+              stroke="#57496a"
+              stroke-width="5"></path>
+            <path
+              d="M82 64 78 39Q102 36 111 60M203 58Q204 34 221 38L225 70"
+              fill="#e995b5"></path>
+            <ellipse
+              cx="154"
+              cy="144"
+              rx="113"
+              ry="109"
+              fill="#f8c5d9"
+              stroke="#57496a"
+              stroke-width="5"></ellipse>
+            <path
+              d="M74 210Q160 279 247 194Q235 250 168 252Q109 252 74 210"
+              fill="#efacc8"></path>
+            <path
+              d="M129 65Q155 56 180 65"
+              fill="none"
+              stroke="#57496a"
+              stroke-width="8"
+              stroke-linecap="round"></path>
+            <g class="piggy-coin">
+              <ellipse
+                cx="154"
+                cy="23"
+                rx="14"
+                ry="21"
+                fill="#ffe2a0"
+                stroke="#57496a"
+                stroke-width="4"></ellipse>
+              <path
+                d="M154 13C144 5 139 19 154 30C169 19 164 5 154 13"
+                fill="#d6819f"></path>
+            </g>
+            <path
+              d="M264 193Q302 205 294 185Q288 171 283 185Q280 195 292 198"
+              fill="none"
+              stroke="#57496a"
+              stroke-width="5"
+              stroke-linecap="round"></path>
+            <path
+              d="M98 82Q78 97 76 113"
+              fill="none"
+              stroke="#fff9ed"
+              stroke-width="8"
+              stroke-linecap="round"
+              opacity=".8"></path>
+            <ellipse
+              cx="43"
+              cy="135"
+              rx="23"
+              ry="13"
+              transform="rotate(-16 43 135)"
+              fill="#f5b5cd"
+              stroke="#57496a"
+              stroke-width="5"></ellipse>
+            <ellipse
+              cx="268"
+              cy="137"
+              rx="23"
+              ry="13"
+              transform="rotate(16 268 137)"
+              fill="#f5b5cd"
+              stroke="#57496a"
+              stroke-width="5"></ellipse>
+            <ellipse cx="120" cy="144" rx="6" ry="10" fill="#57496a"
+            ></ellipse><ellipse cx="190" cy="144" rx="6" ry="10" fill="#57496a"
+            ></ellipse>
+            <ellipse cx="101" cy="172" rx="14" ry="6" fill="#edb6c3"
+            ></ellipse><ellipse cx="210" cy="172" rx="14" ry="6" fill="#edb6c3"
+            ></ellipse>
+            <ellipse
+              cx="155"
+              cy="175"
+              rx="30"
+              ry="21"
+              fill="#e995b5"
+              stroke="#57496a"
+              stroke-width="4"></ellipse>
+            <ellipse cx="144" cy="175" rx="4" ry="6" fill="#57496a"></ellipse>
+            <ellipse cx="166" cy="175" rx="4" ry="6" fill="#57496a"></ellipse>
+            <path
+              d="M145 207Q155 214 165 207"
+              fill="none"
+              stroke="#57496a"
+              stroke-width="4"
+              stroke-linecap="round"></path>
+            <path
+              d="M211 180C193 167 210 158 214 169C220 158 235 169 211 180"
+              fill="#ba6b88"></path>
+            <path d="m75 87 4-10 4 10 10 4-10 4-4 10-4-10-10-4Z" fill="#f9e793"
+            ></path>
+          </svg>
+          <span class="buddy-tag">PIGGY BANK · 存一点小幸福</span>
+        </section>
 
-      <div class="grid items-start gap-6 lg:grid-cols-[1.35fr_0.95fr]">
-        <div class="flex flex-col gap-6">
-          <section class="ink-card home-panel p-5 sm:p-6">
-            <div class="mb-5 flex items-center justify-between gap-3">
-              <h2
-                class="text-lg font-semibold text-stone-900 dark:text-stone-100"
-              >
-                最近文章
-              </h2>
-              <Link
-                href="/posts"
-                underline={false}
-                class="text-sm text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
-              >
-                查看全部文章 →
-              </Link>
-            </div>
+        <nav class="desktop-icons" aria-label="桌面应用">
+          <button data-open="photos"
+            ><span class="app-icon icon-photos">▧</span><strong
+              >PHOTO DRAWER</strong
+            ><small>6 LITTLE MEMORIES</small></button
+          >
+          <button data-open="mail"
+            ><span class="app-icon icon-mail">✉</span><strong>MAILBOX</strong
+            ><small id="unread-count">6 UNREAD</small></button
+          >
+          <a href="/posts"
+            ><span class="app-icon icon-blog">▤</span><strong>JOURNAL</strong
+            ><small>WORDS & STORIES ↗</small></a
+          >
+          <button data-open="style"
+            ><span class="app-icon icon-style">✿</span><strong
+              >PERSONALIZE</strong
+            ><small>MAKE IT YOURS</small></button
+          >
+        </nav>
 
-            <ul class="divide-y divide-stone-200/70 dark:divide-stone-800">
-              {
-                posts.slice(0, SITE.NUM_POSTS_ON_HOMEPAGE).map((post) => (
-                  <li>
-                    <a
-                      href={`/${post.data.slug || post.id}`}
-                      class="group grid gap-4 py-4 transition-colors sm:grid-cols-[128px_1fr] sm:items-center"
-                    >
-                      {post.data.cover ? (
-                        <span class="cover-frame block h-24 sm:h-20">
-                          <img
-                            src={post.data.cover}
-                            alt=""
-                            class="cover-image h-full group-hover:opacity-90"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        </span>
-                      ) : (
-                        <div class="flex h-24 w-full items-center justify-center rounded-lg border border-stone-200/70 bg-stone-100/60 text-stone-400 sm:h-20 dark:border-stone-800 dark:bg-stone-900/70">
-                          <svg
-                            class="h-7 w-7"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            aria-hidden="true"
-                          >
-                            <path d="M4 19.5V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-1.5Z" />
-                            <path d="M8 7h7" />
-                            <path d="M8 11h8" />
-                          </svg>
-                        </div>
-                      )}
-                      <div class="min-w-0">
-                        <div class="flex items-start gap-2">
-                          <h3 class="line-clamp-2 flex-1 text-base leading-snug font-semibold text-stone-800 transition-colors group-hover:text-stone-950 dark:text-stone-200 dark:group-hover:text-stone-50">
-                            {post.data.title}
-                            <span
-                              class="ml-1.5 inline-flex translate-x-[-3px] align-[-2px] text-stone-400 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-safe:transition-[opacity,translate] motion-safe:duration-200 motion-safe:ease-out dark:text-stone-500"
-                              aria-hidden="true"
-                            >
-                              <svg
-                                class="h-3.5 w-3.5"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              >
-                                <path d="M5 12h14" />
-                                <path d="m13 6 6 6-6 6" />
-                              </svg>
-                            </span>
-                          </h3>
-                          {showDraftPosts && post.data.draft && (
-                            <span class="mt-0.5 rounded border border-rose-200 bg-rose-50 px-1.5 py-0.5 text-[10px] font-medium text-rose-500 dark:border-rose-900/60 dark:bg-rose-950/30 dark:text-rose-300">
-                              草稿
-                            </span>
-                          )}
-                        </div>
-                        {post.data.description && (
-                          <p class="mt-1 line-clamp-1 text-sm text-stone-500 dark:text-stone-400">
-                            {post.data.description}
-                          </p>
-                        )}
-                        <div class="mt-2 flex items-center gap-2 font-mono text-xs text-stone-400 dark:text-stone-500">
-                          <span>{formatDate(post.data.date)}</span>
-                          <span>·</span>
-                          <span>{readingTime(post.body ?? '')}</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </section>
-
-          <section class="ink-card home-panel hidden p-5 sm:block sm:p-6">
-            <div class="mb-4">
-              <h2
-                class="text-lg font-semibold text-stone-900 dark:text-stone-100"
-              >
-                内容统计
-              </h2>
-            </div>
-            <div
-              class="grid grid-cols-2 divide-x divide-stone-200/70 dark:divide-stone-800"
-            >
-              <a
-                href="/posts"
-                class="group pr-5 transition-colors"
-                aria-label={`查看 ${posts.length} 篇文章`}
-              >
-                <span
-                  class="inline-flex items-center text-sm text-stone-500 dark:text-stone-400"
-                >
-                  文章
-                  <span
-                    class="ml-1 inline-flex translate-x-[-3px] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-safe:transition-[opacity,translate] motion-safe:duration-200 motion-safe:ease-out"
-                    aria-hidden="true"
-                  >
-                    →
-                  </span>
-                </span>
-                <span
-                  class="mt-2 block text-3xl leading-none font-semibold text-stone-900 transition-colors group-hover:text-stone-950 dark:text-stone-100 dark:group-hover:text-stone-50"
-                >
-                  {posts.length}
-                </span>
-                <span
-                  class="mt-2 block text-xs text-stone-400 dark:text-stone-500"
-                >
-                  篇公开文章
-                </span>
-              </a>
-              <a
-                href="/thoughts"
-                class="group pl-5 transition-colors"
-                aria-label={`查看 ${thoughts.length} 条碎碎念`}
-              >
-                <span
-                  class="inline-flex items-center text-sm text-stone-500 dark:text-stone-400"
-                >
-                  碎碎念
-                  <span
-                    class="ml-1 inline-flex translate-x-[-3px] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-safe:transition-[opacity,translate] motion-safe:duration-200 motion-safe:ease-out"
-                    aria-hidden="true"
-                  >
-                    →
-                  </span>
-                </span>
-                <span
-                  class="mt-2 block text-3xl leading-none font-semibold text-stone-900 transition-colors group-hover:text-stone-950 dark:text-stone-100 dark:group-hover:text-stone-50"
-                >
-                  {thoughts.length}
-                </span>
-                <span
-                  class="mt-2 block text-xs text-stone-400 dark:text-stone-500"
-                >
-                  条生活流
-                </span>
-              </a>
-            </div>
-          </section>
+        <div class="desktop-note">
+          <span>✦</span> SOME THINGS ARE WORTH KEEPING.
         </div>
 
-        <div class="flex h-full flex-col gap-6">
-          {
-            thoughts.length > 0 && (
-              <section class="ink-card home-panel flex-1 p-5 sm:p-6">
-                <div class="mb-4 flex items-center justify-between gap-3">
-                  <h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">
-                    最近动态 / 碎碎念
-                  </h2>
-                </div>
-                <div class="space-y-3">
-                  {thoughts
-                    .slice(0, SITE.NUM_THOUGHTS_ON_HOMEPAGE + 2)
-                    .map((thought, index) => {
-                      const thoughtId = thoughts.length - index
-                      const preview = extractPlainText(thought.body ?? '')
-                      return (
-                        <a
-                          href={`/thoughts#${thoughtId}`}
-                          class="group grid grid-cols-[auto_1fr] gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-stone-100/55 dark:hover:bg-stone-800/55"
-                        >
-                          <span
-                            class={`mt-1 h-2.5 w-2.5 rounded-full ${accentClasses[index % accentClasses.length]}`}
-                          />
-                          <span class="min-w-0">
-                            <span class="flex items-center gap-2 text-xs">
-                              <span class="font-mono font-semibold text-stone-700 dark:text-stone-300">
-                                #{thoughtId}
-                              </span>
-                              <span
-                                class="time-ago text-stone-400 dark:text-stone-500"
-                                data-timestamp={thought.data.date.getTime()}
-                              >
-                                {timeAgo(thought.data.date)}
-                              </span>
-                            </span>
-                            <span class="mt-1 line-clamp-2 block text-sm leading-relaxed text-stone-600 group-hover:text-stone-900 dark:text-stone-300 dark:group-hover:text-stone-100">
-                              {preview}
-                            </span>
-                          </span>
-                        </a>
-                      )
-                    })}
-                </div>
-                <Link
-                  href="/thoughts"
-                  underline={false}
-                  class="mt-4 inline-flex text-sm text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
-                >
-                  查看全部碎碎念 →
-                </Link>
-              </section>
-            )
-          }
-
-          <section class="ink-card home-panel p-5 sm:p-6">
-            <div class="mb-4 flex items-baseline justify-between gap-3">
-              <h2
-                class="text-lg font-semibold text-stone-900 dark:text-stone-100"
+        <section
+          class="retro-window photo-window"
+          id="window-photos"
+          role="dialog"
+          aria-labelledby="title-photos"
+          tabindex="-1"
+          hidden
+        >
+          <header class="window-titlebar">
+            <h2 id="title-photos">♥ PHOTO_DRAWER</h2><div>
+              <button data-minimize aria-label="最小化照片抽屉">−</button
+              ><button data-close aria-label="关闭照片抽屉">×</button>
+            </div>
+          </header>
+          <div class="window-body">
+            <div class="window-intro">
+              <div>
+                <span class="micro-label">COLLECTION / 01</span><h3>
+                  把平凡的瞬间，留久一点。
+                </h3>
+              </div><span class="collection-count"
+                >06 <small>MEMORIES</small></span
               >
-                模板能力
-              </h2>
-              <span class="font-mono text-xs text-stone-400">Features</span>
             </div>
-            <div class="flex flex-wrap gap-2">
-              {
-                featureItems.map((item) => (
-                  <span class="rounded-md border border-stone-200/70 bg-white/45 px-2.5 py-1.5 text-xs text-stone-600 dark:border-stone-800 dark:bg-stone-900/45 dark:text-stone-300">
-                    {item}
-                  </span>
-                ))
-              }
-            </div>
-            <p
-              class="mt-4 text-sm leading-7 text-stone-500 dark:text-stone-400"
-            >
-              先替换配置和示例内容，再按 README 选择是否启用 GitHub Issues
-              评论、点赞和在线发布。
+            <p class="sample-note">
+              ✦ 示例相框 · 放入你自己的照片后，这里就会成为你的回忆。
             </p>
-          </section>
-        </div>
-      </div>
+            <div class="photo-grid">
+              {
+                photos.map((photo, index) => (
+                  <button
+                    class={`polaroid tone-${photo.tone}`}
+                    data-photo={index}
+                    style={`--tilt:${[-2, 1.5, -1, 1.5, -1.5, 1][index]}deg`}
+                    aria-label={`查看${photo.title}`}
+                  >
+                    <>
+                      <span class="photo-image">
+                        {photo.src ? (
+                          <img
+                            src={photo.src}
+                            alt={photo.title}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <>
+                            <span class="photo-number">IMG_00{index + 1}</span>
+                            <span class="placeholder-art" aria-hidden="true">
+                              {['✿', '≈', '☾', '♡', '✧', '↗'][index]}
+                            </span>
+                            <small>YOUR PHOTO HERE</small>
+                          </>
+                        )}
+                      </span>
+                      <span class="photo-caption">{photo.title} ♡</span>
+                    </>
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+          <footer class="window-status">
+            <span>6 items · 照片示例</span><span>MEMORIES NEVER EXPIRE</span>
+          </footer>
+        </section>
+
+        <section
+          class="retro-window mail-window"
+          id="window-mail"
+          role="dialog"
+          aria-labelledby="title-mail"
+          tabindex="-1"
+          hidden
+        >
+          <header class="window-titlebar">
+            <h2 id="title-mail">♥ BIRTHDAY_MAILBOX</h2><div>
+              <button data-minimize aria-label="最小化信箱">−</button><button
+                data-close
+                aria-label="关闭信箱">×</button
+              >
+            </div>
+          </header>
+          <div class="mail-layout">
+            <nav class="letter-list" aria-label="选择信件">
+              <span class="micro-label">LETTERS FOR YOU</span>{
+                letters.map((letter, index) => (
+                  <button data-letter={index} aria-pressed={index === 0}>
+                    <>
+                      <span class="letter-dot">●</span>
+                      <span>
+                        <>
+                          <strong>第 {index + 1} 封小信</strong>
+                          <small>{letter.title}</small>
+                        </>
+                      </span>
+                    </>
+                  </button>
+                ))
+              }<p>示例信件，等待你的故事。<br />已读状态只保存在本机。</p>
+            </nav><div class="letter-space">
+              {
+                letters.map((letter, index) => (
+                  <article
+                    class="letter-paper"
+                    data-letter-content={index}
+                    hidden={index !== 0}
+                  >
+                    <>
+                      <span class="micro-label">
+                        NO. 0{index + 1} / A LETTER FOR YOU
+                      </span>
+                      <h3>{letter.subject}</h3>
+                      <div class="letter-flourish" aria-hidden="true">
+                        ✦ ♡ ⌁ ✿
+                      </div>
+                      <p>{letter.body}</p>
+                      <span class="letter-signature">with love, always.</span>
+                    </>
+                  </article>
+                ))
+              }
+            </div>
+          </div>
+          <footer class="window-status">
+            <span>6 letters · 信件示例</span><span>TAKE YOUR TIME ♡</span>
+          </footer>
+        </section>
+
+        <DailyWindows />
+        <section
+          class="retro-window style-window"
+          id="window-style"
+          role="dialog"
+          aria-labelledby="title-style"
+          tabindex="-1"
+          hidden
+        >
+          <header class="window-titlebar">
+            <h2 id="title-style">♥ PERSONALIZE</h2><div>
+              <button data-minimize aria-label="最小化个性化设置">−</button
+              ><button data-close aria-label="关闭个性化设置">×</button>
+            </div>
+          </header>
+          <div class="window-body style-body">
+            <span class="micro-label">A SMALL CHANGE OF SCENERY</span><h3>
+              选一个今天的颜色。
+            </h3><p>
+              同一个小桌面，三种不同的心情。设置只保存在你的浏览器。
+            </p><div class="theme-options">
+              {
+                [
+                  {
+                    id: 'picnic',
+                    title: 'Cookie picnic',
+                    code: 'A',
+                    color: '#dfe8bf',
+                  },
+                  {
+                    id: 'bubble',
+                    title: 'Bubble aqua',
+                    code: 'B',
+                    color: '#abe0df',
+                  },
+                  {
+                    id: 'pudding',
+                    title: 'Piggy pink',
+                    code: 'C',
+                    color: '#f5c9db',
+                  },
+                ].map((theme) => (
+                  <button
+                    data-set-theme={theme.id}
+                    aria-pressed={theme.id === 'pudding'}
+                  >
+                    <>
+                      <span
+                        class="theme-swatch"
+                        style={`background:${theme.color}`}
+                      >
+                        ✦
+                      </span>
+                      <span class="micro-label">STYLE {theme.code}</span>
+                      <strong>{theme.title}</strong>
+                      <small>SELECT THEME ↗</small>
+                    </>
+                  </button>
+                ))
+              }
+            </div><p class="sample-note">
+              地图、抓星星小游戏与角色包将在后续版本加入；本版不接入云端上传。
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="taskbar">
+        <button id="start-button" data-open="style">♥ START</button><div
+          id="task-buttons"
+          aria-label="运行中的应用"
+        >
+          <span id="idle-status">选择一个图标，打开一份回忆。</span><button
+            data-task="photos"
+            hidden>▧ PHOTOS</button
+          ><button data-task="mail" hidden>✉ MAIL</button><button
+            data-task="style"
+            hidden>✿ STYLE</button
+          >
+          <button data-task="bowel" hidden>💩 便便</button>
+          <button data-task="meals" hidden>🍚 吃饭</button>
+          <button data-task="food" hidden>🎰 吃什么</button>
+        </div><span class="taskbar-message">♡ 一直在你这边</span>
+      </footer>
+      <span class="sr-only" id="desktop-status" role="status"></span>
+      <noscript
+        ><p class="noscript-note">
+          桌面交互需要 JavaScript。你仍然可以访问 <a href="/posts">博客文章</a
+          >。
+        </p></noscript
+      >
     </div>
-  </Container>
-</PageLayout>
-
-<script>
-  import { setupTimeAgo } from '@lib/timeago-client'
-
-  function init() {
-    setupTimeAgo()
-  }
-
-  document.addEventListener('DOMContentLoaded', init)
-  document.addEventListener('astro:after-swap', init)
-
-  if (document.readyState === 'complete') {
-    init()
-  }
-</script>
+    <dialog id="photo-preview" aria-labelledby="preview-title">
+      <button id="preview-close" aria-label="关闭照片预览">×</button><div
+        id="preview-image"
+      >
+      </div><span class="micro-label" id="preview-number"></span><h2
+        id="preview-title"
+      >
+      </h2><p id="preview-caption"></p>
+    </dialog>
+    <script src="../scripts/memory-desktop.ts"></script>
+    <script src="../scripts/daily-life.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,424 @@
+.daily-dock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+.daily-dock button {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 3px 8px;
+  padding: 12px 15px;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: 3px 4px 0 var(--rose);
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+}
+.daily-dock button > span {
+  grid-row: span 2;
+  align-self: center;
+  font-size: 23px;
+}
+.daily-dock small {
+  font-size: 10px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+.daily-dock button:hover {
+  transform: translateY(-2px);
+}
+.daily-window {
+  width: min(86%, 1000px);
+  left: 7%;
+}
+.daily-body {
+  background: linear-gradient(135deg, var(--paper), var(--cream));
+}
+.daily-body h3 {
+  margin: 10px 0 20px;
+  font-size: 23px;
+}
+.daily-body button {
+  min-height: 36px;
+}
+.daily-body input,
+.daily-body select {
+  width: 100%;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 2px solid var(--rose);
+  border-radius: 8px;
+  background: #fffaf9;
+  color: var(--ink);
+  font: inherit;
+}
+.daily-body input:focus-visible,
+.daily-body select:focus-visible {
+  outline: 3px dashed var(--title);
+  outline-offset: 2px;
+}
+.daily-primary,
+.daily-secondary,
+.food-modes button {
+  padding: 10px 16px;
+  border: 2px solid var(--ink);
+  border-radius: 9px;
+  background: var(--rose);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 700;
+}
+.daily-secondary {
+  background: var(--paper);
+  font-size: 12px;
+}
+.daily-primary:hover,
+.daily-secondary:hover {
+  filter: brightness(1.04);
+}
+.daily-body button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+}
+.checkin-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+  background: #fff8;
+  border: 2px dashed var(--rose);
+  border-radius: 12px;
+}
+.checkin-strip p {
+  flex: 1;
+  min-width: 170px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.meal-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+  padding: 16px;
+  border: 2px dashed var(--rose);
+  border-radius: 12px;
+  background: #fff8;
+}
+.meal-form label {
+  display: grid;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.meal-form button {
+  justify-self: start;
+}
+.daily-feedback {
+  min-height: 20px;
+  margin: 14px 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--ink);
+}
+.diary-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 18px;
+}
+.calendar-panel,
+.diary-detail {
+  padding: 16px;
+  border: 2px solid var(--rose);
+  border-radius: 12px;
+  background: #fff9;
+  min-width: 0;
+}
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.calendar-nav h4 {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+}
+.calendar-nav button {
+  border: 1px solid var(--rose);
+  border-radius: 7px;
+  padding: 4px 10px;
+  background: var(--paper);
+  font-size: 20px;
+}
+.calendar-nav .calendar-today {
+  font-size: 11px;
+}
+.calendar-week,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+.calendar-week span {
+  padding: 7px 0;
+  text-align: center;
+  font-size: 11px;
+  opacity: 0.65;
+}
+.calendar-day {
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  min-height: 52px !important;
+  padding: 4px 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #fff8;
+  font-size: 13px;
+}
+.calendar-day small {
+  min-height: 12px;
+  font-size: 9px;
+}
+.calendar-day.has-records {
+  background: var(--cream);
+}
+.calendar-day[aria-current] {
+  border-color: var(--title);
+}
+.calendar-day[aria-pressed='true'] {
+  background: var(--rose);
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+  font-weight: 700;
+}
+.calendar-caption {
+  margin-top: 15px;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.diary-detail h4 {
+  margin: 0 0 14px;
+  font-size: 13px;
+}
+.diary-entries {
+  display: grid;
+  gap: 12px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+.diary-entry {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--rose);
+  border-radius: 9px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.diary-entry strong {
+  line-height: 1.7;
+}
+.diary-entry label {
+  display: grid;
+  gap: 7px;
+}
+.diary-entry p {
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+.entry-delete {
+  justify-self: start;
+  padding: 0;
+  background: transparent;
+  color: var(--ink);
+  opacity: 0.7;
+  font-size: 10px;
+  text-decoration: underline;
+}
+.diary-empty {
+  padding: 20px 0;
+  font-size: 12px;
+  line-height: 1.9;
+  opacity: 0.65;
+}
+.daily-privacy {
+  margin: 18px 0 12px;
+  font-size: 11px;
+  line-height: 1.9;
+  opacity: 0.75;
+}
+.food-window {
+  width: min(75%, 700px);
+  left: 13%;
+}
+.food-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.food-modes button {
+  font-size: 12px;
+  background: var(--paper);
+}
+.food-modes [aria-pressed='true'] {
+  background: var(--rose);
+}
+.food-pool-note {
+  margin: 18px 0 12px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.food-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+.food-categories span {
+  padding: 5px 9px;
+  border: 1px solid var(--rose);
+  border-radius: 20px;
+  background: #fff8;
+  font-size: 10px;
+}
+.slot-machine {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+  margin: 20px auto;
+  padding: 22px;
+  max-width: 410px;
+  border: 3px solid var(--ink);
+  border-radius: 26px 26px 14px 14px;
+  background: var(--rose);
+  box-shadow: 7px 8px 0 var(--ink);
+}
+.slot-top {
+  font:
+    700 12px MemoryMono,
+    monospace;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+.slot-reels {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  padding: 12px;
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: inset 0 5px 0 #57496a12;
+}
+.slot-reels span {
+  flex: 1;
+  padding: 15px 0;
+  border-radius: 7px;
+  background: var(--cream);
+  text-align: center;
+  font-size: 33px;
+}
+.slot-result {
+  width: 100%;
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  border: 2px dashed var(--ink);
+  border-radius: 8px;
+  background: var(--paper);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.slot-lever {
+  width: 100%;
+  padding: 13px;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: var(--cream);
+  box-shadow: 0 4px 0 var(--ink);
+  font-weight: 700;
+}
+.slot-bottom {
+  font-size: 11px;
+}
+.is-spinning .slot-reels span {
+  animation: food-roll 0.16s linear infinite alternate;
+}
+.is-spinning .slot-reels span:nth-child(2) {
+  animation-delay: 0.06s;
+}
+.piggy-coin {
+  animation: piggy-coin 3s ease-in-out infinite;
+}
+@keyframes food-roll {
+  to {
+    transform: translateY(-7px);
+    filter: blur(2px);
+  }
+}
+@keyframes piggy-coin {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@media (max-width: 900px) {
+  .diary-layout {
+    grid-template-columns: 1fr;
+  }
+  .daily-dock button {
+    padding: 9px;
+    font-size: 11px;
+  }
+}
+@media (max-width: 700px) {
+  .daily-window,
+  .food-window {
+    width: calc(100% - 25px);
+  }
+  .daily-body h3 {
+    font-size: 19px;
+  }
+  .daily-dock {
+    gap: 8px;
+  }
+  .daily-dock button {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 9px 12px;
+  }
+  .daily-dock button > span {
+    grid-row: auto;
+  }
+  .daily-dock small {
+    display: none;
+  }
+  .meal-form {
+    grid-template-columns: 1fr;
+  }
+  .calendar-panel,
+  .diary-detail {
+    padding: 10px;
+  }
+  .slot-machine {
+    padding: 16px;
+    box-shadow: 4px 5px 0 var(--ink);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .piggy-coin,
+  .is-spinning .slot-reels span {
+    animation: none;
+  }
+}
