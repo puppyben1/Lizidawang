@@ -13,10 +13,10 @@ npm run dev
 
 生产构建：`npm run build`。生活记录自检：`node scripts/check-daily-life.ts`。
 
-在 Vercel 导入 `puppyben1/xiaozhubao`，Root Directory 保持仓库根目录（留空或 `./`），使用 Astro 框架。
+在 Vercel 导入 `puppyben1/Lizidawang`，Root Directory 保持仓库根目录（留空或 `./`），使用 Astro 框架。
 `vercel.json` 已指定 `npm ci` 和 `npm run build`，`package.json` 指定 Node.js 24。
-首次部署成功后，在项目 Settings → Domains 添加 `xiaozhubao.top`，并按 Vercel 提示配置 DNS。
-代码中的站点 URL 已设置为 `https://xiaozhubao.top/`，实际域名绑定仍需在平台完成。
+首次部署成功后，在项目 Settings → Domains 添加 `xiaozhubao.me`，并按 Vercel 提示配置 DNS。
+代码中的站点 URL 已设置为 `https://xiaozhubao.me/`，实际域名绑定仍需在平台完成。
 
 首页与生活记录不需要配置密钥。生活数据只保存在当前浏览器，不上传到 GitHub 或 Vercel，不跨设备同步。
 照片与信件目前为示例；真实素材放入仓库后会公开发布，请勿提交私密内容。

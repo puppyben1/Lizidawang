@@ -51,7 +51,7 @@ function resolveViteEnv() {
 }
 
 export default defineConfig({
-  site: 'https://xiaozhubao.top/',
+  site: 'https://xiaozhubao.me/',
   compressHTML: true,
   devToolbar: {
     enabled: false,
@@ -100,7 +100,7 @@ export default defineConfig({
     remarkPlugins: [
       remarkGithubAlerts,
       remarkDemoteH1ToH2,
-      [remarkExternalLinks, { allowHostnames: ['xiaozhubao.top'] }],
+      [remarkExternalLinks, { allowHostnames: ['xiaozhubao.me'] }],
     ],
     rehypePlugins: [rehypeHeadingLinks, rehypeThoughtLineBreaks],
   },

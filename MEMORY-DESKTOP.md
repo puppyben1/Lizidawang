@@ -56,6 +56,6 @@ src/styles/memory.css 控制桌面配色、窗口、颗粒、阴影及响应式�
 
 本版不包含回忆地图、抓星星小游戏、角色包导入、云端照片上传。这些没有被做成看似可用的假按钮。桌面角色为项目内自绘 SVG，不是从参考图提取的原角色素材。
 
-原主题的评论、发布、相册等服务保留原配置方式；未配置的外部服务不代表已可用。站点域名已在 astro.config.mjs 中设置为 xiaozhubao.top，正式上线仍需在 Vercel 添加域名并配置 DNS。
+原主题的评论、发布、相册等服务保留原配置方式；未配置的外部服务不代表已可用。站点域名已在 astro.config.mjs 中设置为 xiaozhubao.me，正式上线仍需在 Vercel 添加域名并配置 DNS。
 
 为支持 npm 和 Windows，构建命令去掉 Unix 专用 rm；ESLint 与 @eslint/js 改用 9.x，以满足原主题 jsx-a11y 插件的 peer dependency，而不是用 --force 绕过冲突。Vite 固定在 Astro 6 支持的 7.x 系列，避免传递依赖引入不兼容的 Vite 8；sitemap 路径通过 fileURLToPath 转换以支持 Windows。本项目使用 Node.js 24、npm 11 和 package-lock.json，移除已过期的上游 bun.lock，Vercel 明确使用 npm ci 安装依赖。
